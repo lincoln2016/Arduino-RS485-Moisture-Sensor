@@ -29,6 +29,8 @@ void setup()
 // Main Program Loop
 void loop() 
 {
+  //will change ID 1 to ID 11
+  //writeHoldingRegisterValues()
   readHoldingRegisterValues();
   delay(500);
   readHoldingRegisterValues2();
@@ -52,7 +54,7 @@ void writeHoldingRegisterValues()
 {
      Serial.println("Write to Holding Register 1 to change ID ... ");
      //  the values are id number, holding register number 0(ID), and last is the new ID value
-     ModbusRTUClient.holdingRegisterWrite(1, 0x00, 1);
+     ModbusRTUClient.holdingRegisterWrite(1, 0x00, 11);
      if (!ModbusRTUClient.endTransmission()) 
      {
        Serial.print("failed to connect ");
