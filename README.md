@@ -2,8 +2,10 @@
 
 parts
    - MKR 1000 board
+   
         https://store.arduino.cc/usa/arduino-mkr1000-with-headers-mounted
    - MKR 485 shield
+   
         https://store.arduino.cc/usa/arduino-mkr-485-shield
    - Modbus RS485 soil moisture sensor
         by Catnip electronics
