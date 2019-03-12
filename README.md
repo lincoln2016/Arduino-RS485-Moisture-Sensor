@@ -1,4 +1,5 @@
 # Arduino-RS485-Moisture-Sensor
+read the registers and change the ID on a sensor
 
 parts
    - MKR 1000 board
@@ -13,7 +14,6 @@ parts
         
         https://www.tindie.com/products/miceuz/modbus-rs485-soil-moisture-sensor-2/ 
         
-reads the registers and can change the ID on a sensor
 
 Wiring the RS485 Shield to the Sensor, the default setting on the shield were used
 
