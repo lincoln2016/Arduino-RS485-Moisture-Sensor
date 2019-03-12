@@ -8,7 +8,9 @@ parts
    
         https://store.arduino.cc/usa/arduino-mkr-485-shield
    - Modbus RS485 soil moisture sensor
+   
         by Catnip electronics
+        
         https://www.tindie.com/products/miceuz/modbus-rs485-soil-moisture-sensor-2/ 
         
 reads the registers and can change the ID on a sensor
