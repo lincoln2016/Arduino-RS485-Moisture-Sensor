@@ -3,8 +3,12 @@ reads the registers and can change the ID on a sensor
 
 Wiring the RS485 Shield to the Sensor, the default setting on the shield were used
 
-Senors wires to RS485 Shield
+RS485 Moisture Senor wire colors to RS485 Shield Terminals
+
 Red wired to the VCC
+
 Black wired to the GND
+
 Blue wired to the Z teminal
+
 Yellow wired to the Y terminal
