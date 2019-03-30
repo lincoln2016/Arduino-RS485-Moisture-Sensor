@@ -30,7 +30,7 @@ void setup()
 void loop() 
 {
   //will change ID 1 to ID 11
-  //writeHoldingRegisterValues()
+  //writeHoldingRegisterValues();
   readHoldingRegisterValues();
   delay(500);
   readHoldingRegisterValues2();
