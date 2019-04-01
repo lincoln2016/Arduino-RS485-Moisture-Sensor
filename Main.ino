@@ -1,8 +1,9 @@
 /*
   Modbus RS485 Soil Moisture Sensor with temp
-   - read all the holding and register values for ID 1
-   - read temp and moisture for ID 11
-   - method to change ID 1 to a new ID
+   - this sketch reads all the holding and register values for ID #1(the default id of the sensors)
+   - method to change ID 1 to newSensorID(variable below, set to 11) this will change the ID of the sensor
+   from 1 to 11
+   - reads temp and moisture for the newSensorID
   Circuit:
    - MKR 1000 board
    - MKR 485 shield
@@ -14,6 +15,11 @@
 // ArduinoModbus depends on the ArduinoRS485 library
 #include <ArduinoRS485.h> 
 #include <ArduinoModbus.h>
+// NEW ID FOR THE RS485  soil moisture sensor(below)
+// change the ID to the new ID you want for the sensor
+// the default is to change the sensor ID to 11
+
+const int newSensorID = 11;   // change to the new ID of the sensor
 
 void setup() 
 {
@@ -29,8 +35,10 @@ void setup()
 // Main Program Loop
 void loop() 
 {
-  //will change ID 1 to ID 11
-  //writeHoldingRegisterValues();
+
+//********************************************************
+//  changes the ID to the variable listed above for newSensorID
+  writeHoldingRegisterValues();
   readHoldingRegisterValues();
   delay(500);
   readHoldingRegisterValues2();
@@ -39,9 +47,9 @@ void loop()
   delay(500);
   readHoldingRegisterValues4();
   delay(500);
-  readInputRegisterValues11();
+  readInputRegisterValues_newSensorID_Moisture();
   delay(500);
-  readInputRegisterValues11t();
+  readInputRegisterValues_newSensorID_Temp();
   delay(500);
   readInputRegisterValues();
   delay(500);
@@ -49,12 +57,12 @@ void loop()
   delay(5000);
   Serial.println();
 }
-    // call to change the ID of Sensor
+    // call to change the ID of Sensor to the variable newSensorID
 void writeHoldingRegisterValues() 
 {
-     Serial.println("Write to Holding Register 1 to change ID ... ");
+       Serial.println("Write to Holding Register 1 to change ID ... ");
      //  the values are id number, holding register number 0(ID), and last is the new ID value
-     ModbusRTUClient.holdingRegisterWrite(1, 0x00, 11);
+     ModbusRTUClient.holdingRegisterWrite(1, 0x00, newSensorID);
      if (!ModbusRTUClient.endTransmission()) 
      {
        Serial.print("failed to connect ");
@@ -63,8 +71,9 @@ void writeHoldingRegisterValues()
      } 
      else 
         {
-          Serial.println("changed to ID");
-        }
+          Serial.print("changed ID to : ");
+          Serial.println(newSensorID);
+         }
 }
 //*********************************************************************
 //  HOLDING REGISTER VALUES FOR THE MOISTURE SENSOR
@@ -200,41 +209,51 @@ void readInputRegisterValues2()
         Serial.println();
      }
 }
-// READ Moisture for ID 11
-void readInputRegisterValues11() 
+// READ Moisture for ID newSensorID
+void readInputRegisterValues_newSensorID_Moisture() 
 {
-  Serial.print("Reading ID 11, Register 0, MOISTURE value... ");
-  // read 1 input value from (slave) ID 11 for moisture
-  if (!ModbusRTUClient.requestFrom(11, INPUT_REGISTERS, 0x00,1)) 
+  Serial.print("Reading ID");
+  Serial.print(newSensorID);
+  Serial.println(", Register 0, MOISTURE value... ");
+ // read 1 input value from (slave) ID newSensorID for moisture
+  if (!ModbusRTUClient.requestFrom(newSensorID, INPUT_REGISTERS, 0x00,1)) 
   {
       Serial.print("failed to connect ");
       Serial.println(ModbusRTUClient.lastError());
   } 
   else 
      {
-        Serial.println("moisture for ID 11 is ");
-    
-        while (ModbusRTUClient.available()) 
+          Serial.print("moisture for ID ");
+         Serial.print(newSensorID);
+         Serial.println(" is ");
+      while (ModbusRTUClient.available()) 
         {
            Serial.print(ModbusRTUClient.read());
            Serial.print(' ');
         }
         Serial.println();
-     }
+      }
 }
-// READ Temp for ID 11
-void readInputRegisterValues11t() 
+// READ Temp for ID newSensorID
+void readInputRegisterValues_newSensorID_Temp() 
 {
-  Serial.print("Reading ID 11, Register 1, TEMP value... ");
-  // read 1 input value from (slave) ID 11 for temp
-  if (!ModbusRTUClient.requestFrom(11, INPUT_REGISTERS, 0x01,1)) 
+
+    Serial.print("Reading ID");
+  Serial.print(newSensorID);
+  Serial.println(", Register 1, TEMP value... ");
+  
+  // read 1 input value from (slave) ID newSensorID for temp
+  if (!ModbusRTUClient.requestFrom(newSensorID, INPUT_REGISTERS, 0x01,1)) 
   {
       Serial.print("failed to connect ");
       Serial.println(ModbusRTUClient.lastError());
   } 
   else 
      {
-        Serial.println("temp for ID 11 is ");
+          Serial.print("temp for ");
+         Serial.print(newSensorID);
+         Serial.println(" is ");
+  
         while (ModbusRTUClient.available()) 
         {
            Serial.print(ModbusRTUClient.read());
