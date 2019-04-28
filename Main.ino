@@ -19,14 +19,14 @@
 // change the ID to the new ID you want for the sensor
 // the default is to change the sensor ID to 11
 
-const int newSensorID = 11;   // change to the new ID of the sensor
+int newSensorID = 11;   // change to the new ID of the sensor
 
 void setup() 
 {
   Serial.begin(9600);
   Serial.println("Starting Modbus Client Moisture Sensor");
   // start the Modbus client, DEFAULT the moisture sensor runs at 19200 with a 500ms innterval
-  if (!ModbusRTUClient.begin(19200)) 
+  if (!ModbusRTUClient.begin(9600)) 
   {
       Serial.println("Error, the modbus client did not start");
       while (1);
@@ -38,7 +38,11 @@ void loop()
 
 //********************************************************
 //  changes the ID to the variable listed above for newSensorID
-  writeHoldingRegisterValues();
+ // writeHoldingRegisterValues();
+    writeBaudRateValue() ;
+    if(newSensorID >16){newSensorID =11;}
+    
+    newSensorID++;
   readHoldingRegisterValues();
   delay(500);
   readHoldingRegisterValues2();
@@ -57,6 +61,38 @@ void loop()
   delay(5000);
   Serial.println();
 }
+//   call to change the baud rate of Sensor named newSensorID
+//            Supported baudrates
+//        Number  Baudrate
+//        0 1200
+//        1 2400
+//        2 4800
+//        3 9600
+//        4 19200 - not working more than 4 sensors on 20 feet cat 5
+//        5 38400
+//        6 57600
+//        7 115200
+//
+void writeBaudRateValue() 
+{
+       Serial.println("Write to 'newSensorID', Holding Register 1(baud Rate) to change BaudRate to 9600 ... ");
+     //  the values are id number, holding register number 0(ID), and last is the new ID value
+     ModbusRTUClient.holdingRegisterWrite(newSensorID, 0x01, 3);
+     if (!ModbusRTUClient.endTransmission()) 
+     {
+       Serial.print("failed to connect ");
+       // prints error of failure
+       Serial.println(ModbusRTUClient.lastError());
+     } 
+     else 
+        {
+          Serial.print("changed BaudRate of sensor ");
+          Serial.print(newSensorID);
+          Serial.print(" to : ");
+          Serial.println("9600");
+         }
+}
+
     // call to change the ID of Sensor to the variable newSensorID
 void writeHoldingRegisterValues() 
 {
@@ -109,8 +145,8 @@ void readHoldingRegisterValues2()
 {
      Serial.println("Reading Holding 2 Input Register values for Baud Rate ... ");
      delay(500);
-     // read 1 Input Register value from (slave) id 42, address 0x00
-  if (!ModbusRTUClient.requestFrom(1, HOLDING_REGISTERS, 0x01, 1))
+     // read 1 Input Register value from (slave) id 42, address 0x01
+  if (!ModbusRTUClient.requestFrom(newSensorID, HOLDING_REGISTERS, 0x01, 1))
   {
       Serial.print("failed to connect ");
       Serial.println(ModbusRTUClient.lastError());
@@ -209,6 +245,12 @@ void readInputRegisterValues2()
         Serial.println();
      }
 }
+//
+//        Input (read only) registers
+//      Register number    Size (bytes)  Description
+//        0                 2            Soil moisture. 'Unsigned'
+//        1                 2            Temperature. 'Signed'. In tenths of degrees Celsius. I.e. 220 means 22.0C
+//
 // READ Moisture for ID newSensorID
 void readInputRegisterValues_newSensorID_Moisture() 
 {
