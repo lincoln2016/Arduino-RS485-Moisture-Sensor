@@ -1,5 +1,6 @@
 # Arduino-RS485-Capacitance-Moisture-Sensor
 read the registers and change the ID on a sensor
+changes the baud rate to 9600
 
 parts
    - MKR 1000 board
